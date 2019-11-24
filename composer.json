@@ -1,0 +1,43 @@
+{
+    "name": "preshy/laraveljsontoseeder",
+    "description": ":description",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Precious Opusunju (masterpreshy)",
+            "email": "masterpreshy1@gmail.com",
+            "homepage": "https://masterpreshy.dev"
+        }
+    ],
+    "homepage": "https://github.com/preshy/laraveljsontoseeder",
+    "keywords": ["Laravel", "LaravelJsonToSeeder"],
+    "require": {
+        "illuminate/support": "~5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~7.0",
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "~3.0",
+        "sempro/phpunit-pretty-print": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Preshy\\LaravelJsonToSeeder\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Preshy\\LaravelJsonToSeeder\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Preshy\\LaravelJsonToSeeder\\LaravelJsonToSeederServiceProvider"
+            ],
+            "aliases": {
+                "LaravelJsonToSeeder": "Preshy\\LaravelJsonToSeeder\\Facades\\LaravelJsonToSeeder"
+            }
+        }
+    }
+}
