@@ -3,6 +3,7 @@
 namespace Preshy\LaravelJsonToSeeder\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 
 class LaravelJsonToSeederCommand extends Command {
 
@@ -25,7 +26,8 @@ class LaravelJsonToSeederCommand extends Command {
 
     public function handle() {
   
-        $path = $this->argument('path');
+		$path = $this->argument('path');
+		
         if(file_exists($path)) {
 
 			$explode = explode("/", $path);
@@ -35,7 +37,7 @@ class LaravelJsonToSeederCommand extends Command {
 
 			$inserts = $this->generateDBImports($table, $json);
 
-			$string = implode("\n\n", $inserts);
+			$string = implode("", $inserts);
 
 			$createSeeder = $this->createSeeder($table, $string);
 
@@ -46,7 +48,7 @@ class LaravelJsonToSeederCommand extends Command {
 			}
 
         } else {
-            $this->error('File not exists');  
+            $this->error('File does not exist');  
     	}
 
 	}
@@ -71,15 +73,15 @@ class LaravelJsonToSeederCommand extends Command {
 		}
 
 		foreach($array as $data) {
-			$code = '';
+			$code = "";
 			foreach($data as $j => $d) {
-				$code .= "'$j' => '$d', ";
+				$code .= "'$j' => '$d',\n";
 			}
 
-			$inserts[] = 
-		"DB::table('$table')->insert([
-		     $code
-		]);";
+$inserts[] = 
+"DB::table('$table')->insert([
+	$code
+]);"."\n\n";
 
 			}
 
@@ -87,12 +89,12 @@ class LaravelJsonToSeederCommand extends Command {
 	}
 
 	public function createSeeder($table, $data) {
-$sample = "
-<?php
+$sample = "<?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
-class ".ucwords($table)." extends Seeder
+class ".ucwords($table)."TableSeeder extends Seeder
 {
 	/**
 	 * Run the database seeds.
@@ -120,6 +122,9 @@ class ".ucwords($table)." extends Seeder
 		} else {
 		// Create File In Seeder Folder
 		$file = \file_put_contents($filename, $sample);
+		
+		// Call optimize
+		Artisan::call('cache:clear');
 
 		if($file) {
 			return true;
